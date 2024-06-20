@@ -1,20 +1,23 @@
-import { ThemeProvider } from 'styled-components/native';
+import { ThemeProvider } from "styled-components/native";
 
-import { useFonts, NunitoSans_400Regular, NunitoSans_700Bold } from '@expo-google-fonts/nunito-sans';
+import {
+  useFonts,
+  NunitoSans_400Regular,
+  NunitoSans_700Bold,
+} from "@expo-google-fonts/nunito-sans";
 
-import theme from '@theme/index';
+import theme from "@theme/index";
 
-import Home from '@screens/Home';
+import { Routes } from "@routes/index";
 
-import { Loading } from '@components/Loading';
+import { Loading } from "@components/Loading";
 
 export default function App() {
-
   const [fontLoaded] = useFonts({ NunitoSans_400Regular, NunitoSans_700Bold });
 
   return (
-    <ThemeProvider theme={theme} >
-     {fontLoaded ? <Home /> : <Loading /> } 
+    <ThemeProvider theme={theme}>
+      {fontLoaded ? <Routes /> : <Loading />}
     </ThemeProvider>
   );
 }
