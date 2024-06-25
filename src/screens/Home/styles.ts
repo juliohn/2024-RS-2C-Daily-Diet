@@ -127,7 +127,7 @@ export const TitleList = styled.Text`
   margin-top: 8px;
 `;
 
-export const ItemList = styled.View`
+export const ItemList = styled.TouchableOpacity`
   flex-direction: row;
   height: 46px;
   width: "100%";

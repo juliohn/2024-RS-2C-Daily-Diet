@@ -18,9 +18,9 @@ export function Header({ values }: HeaderProps) {
   };
 
   return (
-    <Container type={true}>
+    <Container type={values.percentage > 50}>
       <BackContainer onPress={handleGoBack}>
-        <Icon type={true} />
+        <Icon type={values.percentage > 50} />
       </BackContainer>
       <Data>
         <Percentage>{values.percentage}%</Percentage>

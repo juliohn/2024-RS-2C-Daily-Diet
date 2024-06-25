@@ -5,6 +5,9 @@ export declare global {
       summary: {
         values: {};
       };
+      details: {
+        item: {};
+      };
     }
   }
 }

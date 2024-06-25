@@ -39,6 +39,8 @@ export function Home() {
   type ItemListProps = {
     id: number;
     hour: string;
+    date: string;
+    title: string;
     description: string;
     status: boolean;
   };
@@ -59,6 +61,8 @@ export function Home() {
         {
           id: 1,
           hour: "16:00",
+          date: "12.08.22",
+          title: "Burguer",
           description:
             "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
           status: false,
@@ -66,6 +70,8 @@ export function Home() {
         {
           id: 3,
           hour: "18:00",
+          date: "12.08.22",
+          title: "Pizza",
           description:
             "Pizza e quando seus olhos refletem o por do sol meu bem?",
           status: true,
@@ -73,6 +79,8 @@ export function Home() {
         {
           id: 2,
           hour: "20:00",
+          date: "12.08.22",
+          title: "Hot-Dog",
           description: "No buraco da bala, na lage é brinquedo",
           status: true,
         },
@@ -84,6 +92,8 @@ export function Home() {
         {
           id: 1,
           hour: "16:00",
+          date: "11.08.22",
+          title: "Bean",
           description:
             "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
           status: false,
@@ -91,12 +101,16 @@ export function Home() {
         {
           id: 3,
           hour: "18:00",
+          date: "11.08.22",
+          title: "Rice",
           description: "Japanese food Um dia so pra vadiar",
           status: false,
         },
         {
           id: 2,
           hour: "20:00",
+          date: "11.08.22",
+          title: "Meat",
           description: "Coxinha se nunca vacilei, não é agora que vai ser",
           status: true,
         },
@@ -108,6 +122,8 @@ export function Home() {
         {
           id: 1,
           hour: "16:00",
+          date: "10.08.22",
+          title: "Salad",
           description:
             "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
           status: false,
@@ -115,12 +131,16 @@ export function Home() {
         {
           id: 3,
           hour: "18:00",
+          date: "10.08.22",
+          title: "Popcorn",
           description: "Pizza",
           status: false,
         },
         {
           id: 2,
           hour: "20:00",
+          date: "10.08.22",
+          title: "Japanese Food",
           description: "No buraco da bala, na lage é brinquedo",
           status: true,
         },
@@ -132,6 +152,8 @@ export function Home() {
         {
           id: 1,
           hour: "16:00",
+          date: "09.08.22",
+          title: "Fried pastry",
           description:
             "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
           status: false,
@@ -139,12 +161,16 @@ export function Home() {
         {
           id: 3,
           hour: "18:00",
+          date: "09.08.22",
+          title: "Pasta",
           description: "Pizza",
           status: false,
         },
         {
           id: 2,
           hour: "20:00",
+          date: "09.08.22",
+          title: "Eggs",
           description: "No buraco da bala, na lage é brinquedo",
           status: true,
         },
@@ -156,6 +182,8 @@ export function Home() {
         {
           id: 1,
           hour: "16:00",
+          date: "08.08.22",
+          title: "Papaia",
           description:
             "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
           status: false,
@@ -163,12 +191,16 @@ export function Home() {
         {
           id: 3,
           hour: "18:00",
+          date: "08.08.22",
+          title: "Apple",
           description: "Pizza",
           status: false,
         },
         {
           id: 2,
           hour: "20:00",
+          date: "08.08.22",
+          title: "Bananas",
           description: "No buraco da bala, na lage é brinquedo",
           status: true,
         },
@@ -177,18 +209,18 @@ export function Home() {
   ];
 
   const VALUES = {
-    percentage: 99.99,
+    percentage: 49.99,
     decriptionSummary: "das refeicões dentro da dieta",
     title: "Refeições",
   };
 
   const renderItem = ({ item }: ItemProps) => {
     return (
-      <ItemList>
+      <ItemList onPress={() => handleNavigateDetails(item)}>
         <ContainerInfo>
           <Hour> {item.hour}</Hour>
           <Separator>|</Separator>
-          <DescriptionItemList>{item.description}</DescriptionItemList>
+          <DescriptionItemList>{item.title}</DescriptionItemList>
         </ContainerInfo>
         <Status type={item.status} />
       </ItemList>
@@ -198,6 +230,12 @@ export function Home() {
   const handleNavigateSummary = () => {
     navigation.navigate("summary", {
       values: VALUES,
+    });
+  };
+
+  const handleNavigateDetails = (item: ItemListProps) => {
+    navigation.navigate("details", {
+      item: item,
     });
   };
 

@@ -1,18 +1,5 @@
 import styled, { css } from "styled-components/native";
 
-export const Container = styled.View`
-  flex: 1;
-  align-items: center;
-  padding-left: 24px;
-  padding-right: 24px;
-
-  border-top-right-radius: 24px;
-  border-top-left-radius: 24px;
-
-  margin-top: -14px;
-  background-color: ${({ theme }) => theme.colors.white};
-`;
-
 export const Title = styled.Text`
   ${({ theme }) => css`
     font-size: ${theme.font_size.sm}px;
