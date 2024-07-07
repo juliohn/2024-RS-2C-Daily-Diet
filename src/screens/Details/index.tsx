@@ -2,6 +2,12 @@ import { useRoute } from "@react-navigation/native";
 
 import { Container } from "@components/Container";
 
+import { useTheme } from "styled-components/native";
+
+import { HeaderActions } from "@components/HeaderActions";
+import { Button } from "@components/Button";
+import { Plus, Trash } from "phosphor-react-native";
+
 import {
   Title,
   Description,
@@ -10,9 +16,8 @@ import {
   BadgeStatus,
   Status,
   StatusDescription,
+  ButtonContainer,
 } from "./styles";
-
-import { HeaderActions } from "@components/HeaderActions";
 
 type ItemDetailsProps = {
   item: {
@@ -30,11 +35,11 @@ export function Details() {
 
   const { item } = route.params as ItemDetailsProps;
 
-  console.log("===", item);
+  const { colors } = useTheme();
 
   return (
     <>
-      <HeaderActions title="Refeição" type={item.status} />
+      <HeaderActions title="Refeição" type={item.status ? "true" : "false"} />
       <Container align="flex-start">
         <>
           <Title>{item.title}</Title>
@@ -50,6 +55,21 @@ export function Details() {
               {item.status ? "dentro da dieta" : "fora da dieta"}{" "}
             </StatusDescription>
           </BadgeStatus>
+
+          <ButtonContainer>
+            <Button
+              title="Editar refeição"
+              onPress={() => {}}
+              icon={<Plus size={18} color={colors.white} />}
+            />
+
+            <Button
+              type="SECONDARY"
+              title="Excluir refeição"
+              onPress={() => {}}
+              icon={<Trash size={18} color={colors.gray_700} />}
+            />
+          </ButtonContainer>
         </>
       </Container>
     </>

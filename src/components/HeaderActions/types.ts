@@ -1,4 +1,4 @@
 export interface HeaderActionsProps {
   title: string;
-  type?: boolean;
+  type?: string;
 }

@@ -209,7 +209,7 @@ export function Home() {
   ];
 
   const VALUES = {
-    percentage: 49.99,
+    percentage: 58.99,
     decriptionSummary: "das refeicões dentro da dieta",
     title: "Refeições",
   };
@@ -239,6 +239,10 @@ export function Home() {
     });
   };
 
+  const handleNavigateNew = () => {
+    navigation.navigate("new");
+  };
+
   return (
     <Container>
       <Head>
@@ -263,7 +267,7 @@ export function Home() {
 
       <Button
         title=" Nova Refeição"
-        onPress={() => {}}
+        onPress={handleNavigateNew}
         icon={<Plus size={22} color={colors.white} />}
       />
 

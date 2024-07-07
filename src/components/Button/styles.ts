@@ -13,6 +13,7 @@ export const Container = styled(TouchableOpacity)<Props>`
   flex-direction: row;
   min-height: 56px;
   max-height: 56px;
+  margin-bottom: 10px;
 
   background-color: ${({ theme, type }) =>
     type === "PRIMARY" ? theme.colors.gray_700 : theme.colors.white};

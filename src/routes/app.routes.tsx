@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Home } from "@screens/Home";
 import { Summary } from "@screens/Summary";
 import { Details } from "@screens/Details";
+import { New } from "@screens/New";
+import { FinishMessage } from "@screens/FinishMessage";
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -12,6 +14,8 @@ export function AppRoutes() {
       <Screen name="home" component={Home} />
       <Screen name="summary" component={Summary} />
       <Screen name="details" component={Details} />
+      <Screen name="new" component={New} />
+      <Screen name="finish" component={FinishMessage} />
     </Navigator>
   );
 }

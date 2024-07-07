@@ -9,7 +9,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   return (
-    <Container type={type} {...rest}>
+    <Container onPress={onPress} type={type} {...rest}>
       {icon && <ContainerIcon>{icon}</ContainerIcon>}
       <Title type={type}>{title}</Title>
     </Container>

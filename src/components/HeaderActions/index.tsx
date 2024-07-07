@@ -3,7 +3,7 @@ import { Container, BackContainer, Icon, Title, ElementFinal } from "./styles";
 
 import { HeaderActionsProps } from "./types";
 
-export function HeaderActions({ title, type = true }: HeaderActionsProps) {
+export function HeaderActions({ title, type = "true" }: HeaderActionsProps) {
   const navigation = useNavigation();
 
   const handleGoBack = () => {

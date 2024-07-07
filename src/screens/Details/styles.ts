@@ -69,3 +69,9 @@ export const StatusDescription = styled.Text`
     color: ${theme.colors.gray_700};
   `};
 `;
+
+export const ButtonContainer = styled.View`
+  flex: 1;
+  justify-content: flex-end;
+  width: 100%;
+`;

@@ -58,7 +58,7 @@ interface SummaryTypeStylesProps {
 }
 export const Summary = styled.TouchableOpacity<SummaryTypeStylesProps>`
   width: "100%";
-  border-radius: 10;
+  border-radius: 10px;
 
   justify-content: center;
   background-color: ${({ theme, type }) =>
@@ -113,7 +113,6 @@ export const Icon = styled(ArrowUpRight).attrs<IconTypeStylesProps>(
 
 export const List = styled.View`
   flex: 1;
-  margin-top: 20px;
 `;
 
 export const TitleList = styled.Text`

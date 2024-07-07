@@ -3,7 +3,7 @@ import styled, { css } from "styled-components/native";
 import { ArrowLeft } from "phosphor-react-native";
 
 interface HeaderTypeStylesProps {
-  type: boolean;
+  type: string;
 }
 
 export const Container = styled.View<HeaderTypeStylesProps>`
@@ -11,7 +11,11 @@ export const Container = styled.View<HeaderTypeStylesProps>`
   flex-direction: row;
   align-items: center;
   background-color: ${({ theme, type }) =>
-    type ? theme.colors.green_100 : theme.colors.red_100};
+    type === "true"
+      ? theme.colors.green_100
+      : type === "false"
+      ? theme.colors.red_100
+      : theme.colors.gray_300};
 `;
 
 export const BackContainer = styled.TouchableOpacity`
