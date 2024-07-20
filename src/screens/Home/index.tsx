@@ -1,7 +1,7 @@
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Plus } from "phosphor-react-native";
 import { useTheme } from "styled-components/native";
-import { SectionList, Text } from "react-native";
+import { SectionList } from "react-native";
 
 import LogoImage from "@assets/Logo.png";
 import Profile from "@assets/Profile.png";
@@ -30,36 +30,42 @@ import {
   DescriptionItemList,
   Status,
 } from "./styles";
+import { getAllMeals, reset } from "@storage/meals/mealCreate";
+import { useCallback, useEffect, useState } from "react";
+
+import { DataListItemProps } from "./types";
 
 export function Home() {
+  //reset();
+  // - Carrega as refeicoes a cada vez que tiver foco na tela
+  useFocusEffect(
+    useCallback(() => {
+      fetchMeals();
+    }, [])
+  );
   const { colors } = useTheme();
 
   const navigation = useNavigation();
 
-  type ItemListProps = {
-    id: number;
-    hour: string;
-    date: string;
-    title: string;
-    description: string;
-    status: boolean;
-  };
+  const [meals, setMeals] = useState<DataListItemProps[]>([]);
 
-  type ItemProps = {
-    item: ItemListProps;
-  };
-
-  type DataListItemProps = {
-    title: string;
-    data: Array<ItemListProps>;
-  };
+  async function fetchMeals() {
+    try {
+      //await reset();
+      const meals = await getAllMeals();
+      setMeals(meals);
+      console.log("=== Home", meals);
+    } catch (error) {
+      console.log("===", error);
+    }
+  }
 
   const DATA: DataListItemProps[] = [
     {
       title: "12.08.22",
       data: [
         {
-          id: 1,
+          id: "1",
           hour: "16:00",
           date: "12.08.22",
           title: "Burguer",
@@ -68,7 +74,7 @@ export function Home() {
           status: false,
         },
         {
-          id: 3,
+          id: "3",
           hour: "18:00",
           date: "12.08.22",
           title: "Pizza",
@@ -209,7 +215,7 @@ export function Home() {
   ];
 
   const VALUES = {
-    percentage: 58.99,
+    percentage: 88.99,
     decriptionSummary: "das refeicões dentro da dieta",
     title: "Refeições",
   };
@@ -273,7 +279,7 @@ export function Home() {
 
       <List>
         <SectionList
-          sections={DATA}
+          sections={meals}
           renderItem={renderItem}
           renderSectionHeader={({ section: { title } }) => (
             <TitleList>{title}</TitleList>

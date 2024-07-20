@@ -7,7 +7,7 @@ export const Container = styled(TextInput)`
   width: 100%;
   min-height: 56px;
   max-height: ${({ multiline, numberOfLines }) =>
-    multiline ? numberOfLines! * 56 : "56px"};
+    multiline ? numberOfLines! * 56 : "56"}px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 6px;
   padding: 16px;

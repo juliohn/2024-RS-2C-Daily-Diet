@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
+import uuid from "react-native-uuid";
+
 import { Container } from "@components/Container";
 
 import { Input } from "@components/Input";
@@ -19,11 +21,12 @@ import {
   Title,
   ButtonContainer,
 } from "./styles";
+import { mealCreate } from "@storage/meals/mealCreate";
 
 export function New() {
   const navigation = useNavigation();
 
-  const [isDietIn, setIsDietIn] = useState("");
+  const [isDietIn, setIsDietIn] = useState("POSITIVE");
 
   const [name, setName] = useState("");
 
@@ -41,14 +44,17 @@ export function New() {
     setTime(selecteTime!);
   };
 
-  const handleRegisterMeal = () => {
+  const handleRegisterMeal = async () => {
     const newMeal = {
-      name,
-      description,
+      id: uuid.v4().toString(),
+      hour: time.toLocaleTimeString(),
       date: date.toLocaleDateString(),
-      time: time.toLocaleTimeString(),
-      isDietIn,
+      title: name,
+      description: description,
+      status: isDietIn === "POSITIVE" ? true : false,
     };
+
+    await mealCreate(newMeal);
 
     navigation.navigate("finish", {
       item: {
