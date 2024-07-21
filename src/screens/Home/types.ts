@@ -1,4 +1,4 @@
-type ItemListProps = {
+export type ItemListProps = {
   id: string;
   hour: string;
   date: string;
@@ -7,7 +7,7 @@ type ItemListProps = {
   status: boolean;
 };
 
-type ItemProps = {
+export type ItemProps = {
   item: ItemListProps;
 };
 

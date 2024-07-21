@@ -1,5 +1,7 @@
 import { useRoute } from "@react-navigation/native";
 
+import { useNavigation } from "@react-navigation/native";
+
 import { Container } from "@components/Container";
 
 import { useTheme } from "styled-components/native";
@@ -19,23 +21,22 @@ import {
   ButtonContainer,
 } from "./styles";
 
-type ItemDetailsProps = {
-  item: {
-    id: number;
-    hour: string;
-    date: string;
-    title: string;
-    description: string;
-    status: boolean;
-  };
-};
+import { ItemProps } from "@screens/Home/types";
 
 export function Details() {
   const route = useRoute();
 
-  const { item } = route.params as ItemDetailsProps;
+  const navigation = useNavigation();
+
+  const { item } = route.params as ItemProps;
 
   const { colors } = useTheme();
+
+  const handleNavigateEdit = () => {
+    navigation.navigate("edit", {
+      item: item,
+    });
+  };
 
   return (
     <>
@@ -59,7 +60,7 @@ export function Details() {
           <ButtonContainer>
             <Button
               title="Editar refeição"
-              onPress={() => {}}
+              onPress={handleNavigateEdit}
               icon={<Plus size={18} color={colors.white} />}
             />
 

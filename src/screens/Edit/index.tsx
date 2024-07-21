@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import uuid from "react-native-uuid";
 
@@ -10,7 +11,10 @@ import { Input } from "@components/Input";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { HeaderActions } from "@components/HeaderActions";
+
 import { Button } from "@components/Button";
+
+import { ItemProps } from "@screens/Home/types";
 
 import {
   Label,
@@ -21,20 +25,40 @@ import {
   Title,
   ButtonContainer,
 } from "./styles";
-import { mealCreate } from "@storage/meals/actionsMeals";
 
-export function New() {
+import { mealUpdate } from "@storage/meals/actionsMeals";
+
+export function Edit() {
+  const route = useRoute();
+
   const navigation = useNavigation();
 
-  const [isDietIn, setIsDietIn] = useState("POSITIVE");
+  const { item } = route.params as ItemProps;
 
-  const [name, setName] = useState("");
+  const [isDietIn, setIsDietIn] = useState(
+    item.status ? "POSITIVE" : "NEGATIVE"
+  );
 
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState(item.title);
 
-  const [date, setDate] = useState(new Date());
+  const [description, setDescription] = useState(item.description);
 
-  const [time, setTime] = useState(new Date());
+  let [day, month, year] = item.date.split("/");
+
+  let [hours, minutes, seconds] = item.hour.split(":");
+
+  const editDate = new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day),
+    Number(hours),
+    Number(minutes),
+    Number(seconds)
+  );
+
+  const [date, setDate] = useState(editDate);
+
+  const [time, setTime] = useState(editDate);
 
   const onChangeDate = (selectedDate: Date | undefined) => {
     setDate(selectedDate!);
@@ -45,8 +69,8 @@ export function New() {
   };
 
   const handleRegisterMeal = async () => {
-    const newMeal = {
-      id: uuid.v4().toString(),
+    const editMeal = {
+      id: item.id,
       hour: time.toLocaleTimeString(),
       date: date.toLocaleDateString(),
       title: name,
@@ -54,7 +78,7 @@ export function New() {
       status: isDietIn === "POSITIVE" ? true : false,
     };
 
-    await mealCreate(newMeal);
+    await mealUpdate(editMeal);
 
     navigation.navigate("finish", {
       item: {
@@ -65,7 +89,7 @@ export function New() {
 
   return (
     <>
-      <HeaderActions title="Nova Refeição" type={"neutral"} />
+      <HeaderActions title="Editar Refeição" type={"neutral"} />
       <Container align="flex-start">
         <>
           <Label>Nome</Label>
@@ -135,7 +159,7 @@ export function New() {
           </Row>
 
           <ButtonContainer>
-            <Button title="Cadastrar refeição" onPress={handleRegisterMeal} />
+            <Button title="Salvar alterações" onPress={handleRegisterMeal} />
           </ButtonContainer>
         </>
       </Container>

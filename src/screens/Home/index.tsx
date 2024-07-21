@@ -30,10 +30,10 @@ import {
   DescriptionItemList,
   Status,
 } from "./styles";
-import { getAllMeals, reset } from "@storage/meals/mealCreate";
+import { getAllMeals, reset } from "@storage/meals/actionsMeals";
 import { useCallback, useEffect, useState } from "react";
 
-import { DataListItemProps } from "./types";
+import { DataListItemProps, ItemListProps, ItemProps } from "./types";
 
 export function Home() {
   //reset();
@@ -54,7 +54,6 @@ export function Home() {
       //await reset();
       const meals = await getAllMeals();
       setMeals(meals);
-      console.log("=== Home", meals);
     } catch (error) {
       console.log("===", error);
     }

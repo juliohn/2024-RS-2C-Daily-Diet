@@ -9,6 +9,9 @@ export declare global {
       details: {
         item: {};
       };
+      edit: {
+        item: {};
+      };
       finish: {
         item: {
           isDietIn: string;
