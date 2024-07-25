@@ -3,6 +3,7 @@ Expo React Native Crud Saving on Storage
 Styling with CSS-in-JS with Styled Components,
 Navigation with React Navigation,
 Local storage with Async
+Dates with datetimepicker
 
 9 hours of content + coding time
 
