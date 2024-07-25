@@ -96,9 +96,11 @@ export const Description = styled.Text`
   `};
 `;
 
-type IconTypeStylesProps = {
-  type: boolean;
-};
+import { IconProps } from "phosphor-react-native";
+
+interface IconTypeStylesProps extends IconProps {
+  type?: boolean;
+}
 export const Icon = styled(ArrowUpRight).attrs<IconTypeStylesProps>(
   ({ type, theme }) => ({
     size: 28,

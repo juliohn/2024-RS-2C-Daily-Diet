@@ -31,192 +31,64 @@ import {
   Status,
 } from "./styles";
 import { getAllMeals, reset } from "@storage/meals/actionsMeals";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { DataListItemProps, ItemListProps, ItemProps } from "./types";
 
 export function Home() {
-  //reset();
-  // - Carrega as refeicoes a cada vez que tiver foco na tela
-  useFocusEffect(
-    useCallback(() => {
-      fetchMeals();
-    }, [])
-  );
   const { colors } = useTheme();
 
   const navigation = useNavigation();
 
   const [meals, setMeals] = useState<DataListItemProps[]>([]);
+  const [mealIn, setMealIn] = useState<number>(0);
+  const [mealOut, setMealOut] = useState<number>(0);
+  const [percentage, setPercentege] = useState<number>(0);
 
-  async function fetchMeals() {
-    try {
-      //await reset();
-      const meals = await getAllMeals();
-      setMeals(meals);
-    } catch (error) {
-      console.log("===", error);
-    }
-  }
+  const calculate = useCallback(
+    (dataMeals: DataListItemProps[]) => {
+      if (dataMeals.length === 0) {
+        setPercentege(0);
+        setMealOut(0);
+        setMealIn(0);
+        return;
+      }
 
-  const DATA: DataListItemProps[] = [
-    {
-      title: "12.08.22",
-      data: [
-        {
-          id: "1",
-          hour: "16:00",
-          date: "12.08.22",
-          title: "Burguer",
-          description:
-            "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
-          status: false,
-        },
-        {
-          id: "3",
-          hour: "18:00",
-          date: "12.08.22",
-          title: "Pizza",
-          description:
-            "Pizza e quando seus olhos refletem o por do sol meu bem?",
-          status: true,
-        },
-        {
-          id: 2,
-          hour: "20:00",
-          date: "12.08.22",
-          title: "Hot-Dog",
-          description: "No buraco da bala, na lage é brinquedo",
-          status: true,
-        },
-      ],
+      const countDietIn = dataMeals
+        .map(({ data }) => {
+          const filters = data.filter((item) => item.status === true);
+
+          return filters.length;
+        })
+        .reduce((a, b) => a + b, 0);
+
+      setMealIn(countDietIn);
+
+      const countDietOut = dataMeals
+        .map(({ data }) => {
+          const filters = data.filter((item) => item.status === false);
+
+          return filters.length;
+        })
+        .reduce((a, b) => a + b, 0);
+
+      setMealOut(countDietOut);
+
+      const currentPercentage =
+        (countDietIn / (countDietIn + countDietOut)) * 100;
+
+      setPercentege(currentPercentage);
     },
-    {
-      title: "11.08.22",
-      data: [
-        {
-          id: 1,
-          hour: "16:00",
-          date: "11.08.22",
-          title: "Bean",
-          description:
-            "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
-          status: false,
-        },
-        {
-          id: 3,
-          hour: "18:00",
-          date: "11.08.22",
-          title: "Rice",
-          description: "Japanese food Um dia so pra vadiar",
-          status: false,
-        },
-        {
-          id: 2,
-          hour: "20:00",
-          date: "11.08.22",
-          title: "Meat",
-          description: "Coxinha se nunca vacilei, não é agora que vai ser",
-          status: true,
-        },
-      ],
-    },
-    {
-      title: "10.08.22",
-      data: [
-        {
-          id: 1,
-          hour: "16:00",
-          date: "10.08.22",
-          title: "Salad",
-          description:
-            "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
-          status: false,
-        },
-        {
-          id: 3,
-          hour: "18:00",
-          date: "10.08.22",
-          title: "Popcorn",
-          description: "Pizza",
-          status: false,
-        },
-        {
-          id: 2,
-          hour: "20:00",
-          date: "10.08.22",
-          title: "Japanese Food",
-          description: "No buraco da bala, na lage é brinquedo",
-          status: true,
-        },
-      ],
-    },
-    {
-      title: "09.08.22",
-      data: [
-        {
-          id: 1,
-          hour: "16:00",
-          date: "09.08.22",
-          title: "Fried pastry",
-          description:
-            "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
-          status: false,
-        },
-        {
-          id: 3,
-          hour: "18:00",
-          date: "09.08.22",
-          title: "Pasta",
-          description: "Pizza",
-          status: false,
-        },
-        {
-          id: 2,
-          hour: "20:00",
-          date: "09.08.22",
-          title: "Eggs",
-          description: "No buraco da bala, na lage é brinquedo",
-          status: true,
-        },
-      ],
-    },
-    {
-      title: "08.08.22",
-      data: [
-        {
-          id: 1,
-          hour: "16:00",
-          date: "08.08.22",
-          title: "Papaia",
-          description:
-            "Burger Longe de vc eu preciso de algo mais, eu vivo na espera de poder viver a vida com voce",
-          status: false,
-        },
-        {
-          id: 3,
-          hour: "18:00",
-          date: "08.08.22",
-          title: "Apple",
-          description: "Pizza",
-          status: false,
-        },
-        {
-          id: 2,
-          hour: "20:00",
-          date: "08.08.22",
-          title: "Bananas",
-          description: "No buraco da bala, na lage é brinquedo",
-          status: true,
-        },
-      ],
-    },
-  ];
+    [meals]
+  );
 
   const VALUES = {
-    percentage: 88.99,
+    percentage: ((mealIn / (mealIn + mealOut)) * 100).toFixed(2),
     decriptionSummary: "das refeicões dentro da dieta",
     title: "Refeições",
+    mealIn,
+    mealOut,
+    mealsTotal: mealIn + mealOut,
   };
 
   const renderItem = ({ item }: ItemProps) => {
@@ -248,6 +120,40 @@ export function Home() {
     navigation.navigate("new");
   };
 
+  const renderPercentageContainer = useMemo(
+    () => (
+      <Summary onPress={handleNavigateSummary} type={percentage > 50}>
+        <IconNavigate>
+          <Icon type={percentage > 50} />
+        </IconNavigate>
+        <Data>
+          <Percentage>{percentage.toFixed(2)} %</Percentage>
+          <Description>{VALUES.decriptionSummary}</Description>
+        </Data>
+      </Summary>
+    ),
+    [percentage]
+  );
+
+  async function fetchMeals() {
+    try {
+      //await reset();
+      const meals = await getAllMeals();
+
+      setMeals(meals);
+
+      calculate(meals);
+    } catch (error) {
+      console.log("===", error);
+    }
+  }
+
+  // - Carrega as refeicoes a cada vez que tiver foco na tela
+  useFocusEffect(
+    useCallback(() => {
+      fetchMeals();
+    }, [])
+  );
   return (
     <Container>
       <Head>
@@ -258,15 +164,8 @@ export function Home() {
           <Avatar source={Profile} />
         </ContainerProfile>
       </Head>
-      <Summary onPress={handleNavigateSummary} type={VALUES.percentage > 50}>
-        <IconNavigate>
-          <Icon type={VALUES.percentage > 50} />
-        </IconNavigate>
-        <Data>
-          <Percentage>{VALUES.percentage} %</Percentage>
-          <Description>{VALUES.decriptionSummary}</Description>
-        </Data>
-      </Summary>
+
+      {renderPercentageContainer}
 
       <Title>{VALUES.title}</Title>
 

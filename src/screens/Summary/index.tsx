@@ -32,17 +32,17 @@ export function Summary() {
             </DataDescription>
           </DataContainer>
           <DataContainer>
-            <Count>109</Count>
+            <Count>{values.mealsTotal}</Count>
             <DataDescription>refeições registradas</DataDescription>
           </DataContainer>
 
           <Resume>
             <Info type>
-              <Count>99</Count>
+              <Count>{values.mealIn}</Count>
               <DataDescription>refeições dentro da dieta</DataDescription>
             </Info>
             <Info type={false}>
-              <Count>10</Count>
+              <Count>{values.mealOut}</Count>
               <DataDescription>
                 <DataDescription>refeições fora da dieta</DataDescription>
               </DataDescription>

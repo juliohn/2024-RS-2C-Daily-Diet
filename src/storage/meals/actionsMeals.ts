@@ -164,6 +164,48 @@ export async function mealUpdate(editMeal: ItemListProps) {
   }
 }
 
+export async function mealDelete(deleteMeal: ItemListProps) {
+  let newListMeal: DataListItemProps[] | undefined;
+
+  try {
+    const storedMeals = await getAllMeals();
+
+    //- remove o item deletado da lista do storage
+    newListMeal = storedMeals
+      .map((item: any) => {
+        let dataExist = item.data.filter((list: any) => {
+          return list.id !== deleteMeal.id;
+        });
+
+        // - Se nao tiver itens na data, remove o nó (data sem registros inseridos)
+        if (dataExist.length === 0) return;
+
+        return {
+          title: item.title,
+          data: dataExist,
+        };
+      })
+      .filter((final: any) => {
+        return final !== undefined;
+      });
+
+    // - Ordena por data string do maior pro menor
+    if (newListMeal) {
+      newListMeal.sort(function (a, b) {
+        let firstDate = a.title.split("/").reverse().join("");
+        let nextDate = b.title.split("/").reverse().join("");
+
+        return firstDate.localeCompare(nextDate);
+      });
+    }
+
+    // - Salva no storage nova lista
+    await AsyncStorage.setItem(MEALS_COLECTIONS, JSON.stringify(newListMeal));
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function reset() {
   return AsyncStorage.clear();
 }

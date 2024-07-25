@@ -1,14 +1,19 @@
+import { useState, useMemo } from "react";
+
 import { useRoute } from "@react-navigation/native";
 
 import { useNavigation } from "@react-navigation/native";
 
 import { Container } from "@components/Container";
+import { ConfirmModal } from "@components/ConfirmModal";
+import { HeaderActions } from "@components/HeaderActions";
+import { Button } from "@components/Button";
 
 import { useTheme } from "styled-components/native";
 
-import { HeaderActions } from "@components/HeaderActions";
-import { Button } from "@components/Button";
 import { Plus, Trash } from "phosphor-react-native";
+
+import { mealDelete } from "@storage/meals/actionsMeals";
 
 import {
   Title,
@@ -28,6 +33,8 @@ export function Details() {
 
   const navigation = useNavigation();
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   const { item } = route.params as ItemProps;
 
   const { colors } = useTheme();
@@ -37,6 +44,29 @@ export function Details() {
       item: item,
     });
   };
+
+  const handleDelete = async () => {
+    // - Delete item from storage
+    await mealDelete(item);
+    // -  modal to false
+    setModalVisible(false);
+    // - Navigate to home
+    navigation.navigate("home");
+  };
+
+  const renderModalConfirmation = useMemo(
+    () => (
+      <ConfirmModal
+        textConfirm={`Deseja realmente excluir o registro da refeição?`}
+        visible={modalVisible}
+        textButonCancel="Cancelar"
+        textButtonConfirm="Sim, Excluir"
+        callBackConfirm={handleDelete}
+        callBackCancel={() => setModalVisible(false)}
+      />
+    ),
+    [modalVisible]
+  );
 
   return (
     <>
@@ -67,12 +97,13 @@ export function Details() {
             <Button
               type="SECONDARY"
               title="Excluir refeição"
-              onPress={() => {}}
+              onPress={() => setModalVisible(true)}
               icon={<Trash size={18} color={colors.gray_700} />}
             />
           </ButtonContainer>
         </>
       </Container>
+      {modalVisible && renderModalConfirmation}
     </>
   );
 }
