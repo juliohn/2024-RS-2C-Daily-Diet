@@ -9,5 +9,7 @@ Hooks such as useFocusEffect, useState, UseMemo, UseCallback
 9 hours of content + coding time
 
 
-https://github.com/user-attachments/assets/cade3dd2-0f3e-4234-9925-f415b3895250
+
+
+https://github.com/user-attachments/assets/ef73205a-0695-45c9-816e-3887bcb8bf06
 
