@@ -4,6 +4,7 @@ Styling with CSS-in-JS with Styled Components,
 Navigation with React Navigation,
 Local storage with Async
 Dates with datetimepicker
+Hooks such as useFocusEffect, useState, UseMemo, UseCallback
 
 9 hours of content + coding time
 
