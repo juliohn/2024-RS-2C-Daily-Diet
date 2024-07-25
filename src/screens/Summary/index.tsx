@@ -1,4 +1,5 @@
 import { useRoute } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { Header } from "@components/Header";
 import { Container } from "@components/Container";
@@ -12,16 +13,39 @@ import {
   Info,
 } from "./styles";
 
-import { HeaderProps } from "@components/Header/types";
+import { calculate } from "src/helpers/calculate";
+import { useCallback, useState } from "react";
 
 export function Summary() {
   const route = useRoute();
 
-  const { values } = route.params as HeaderProps;
+  interface SummaryProps {
+    percentage: number;
+    mealDietIn: number;
+    mealDietOut: number;
+    mealsTotal: number;
+  }
+  const [data, setData] = useState<SummaryProps>({
+    percentage: 0,
+    mealDietIn: 0,
+    mealDietOut: 0,
+    mealsTotal: 0,
+  });
+
+  const fetchData = async () => {
+    const results = await calculate();
+    setData(results);
+  };
+  // - Carrega as refeicoes a cada vez que tiver foco na tela
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   return (
     <>
-      <Header values={values} />
+      <Header values={{ percentage: data.percentage }} />
       <Container align="center">
         <>
           <Title>Estatísticas Gerais</Title>
@@ -32,17 +56,17 @@ export function Summary() {
             </DataDescription>
           </DataContainer>
           <DataContainer>
-            <Count>{values.mealsTotal}</Count>
+            <Count>{data.mealsTotal}</Count>
             <DataDescription>refeições registradas</DataDescription>
           </DataContainer>
 
           <Resume>
             <Info type>
-              <Count>{values.mealIn}</Count>
+              <Count>{data.mealDietIn}</Count>
               <DataDescription>refeições dentro da dieta</DataDescription>
             </Info>
             <Info type={false}>
-              <Count>{values.mealOut}</Count>
+              <Count>{data.mealDietOut}</Count>
               <DataDescription>
                 <DataDescription>refeições fora da dieta</DataDescription>
               </DataDescription>

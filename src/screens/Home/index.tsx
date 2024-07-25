@@ -34,6 +34,7 @@ import { getAllMeals, reset } from "@storage/meals/actionsMeals";
 import { useCallback, useMemo, useState } from "react";
 
 import { DataListItemProps, ItemListProps, ItemProps } from "./types";
+import { calculate } from "src/helpers/calculate";
 
 export function Home() {
   const { colors } = useTheme();
@@ -41,54 +42,11 @@ export function Home() {
   const navigation = useNavigation();
 
   const [meals, setMeals] = useState<DataListItemProps[]>([]);
-  const [mealIn, setMealIn] = useState<number>(0);
-  const [mealOut, setMealOut] = useState<number>(0);
   const [percentage, setPercentege] = useState<number>(0);
 
-  const calculate = useCallback(
-    (dataMeals: DataListItemProps[]) => {
-      if (dataMeals.length === 0) {
-        setPercentege(0);
-        setMealOut(0);
-        setMealIn(0);
-        return;
-      }
-
-      const countDietIn = dataMeals
-        .map(({ data }) => {
-          const filters = data.filter((item) => item.status === true);
-
-          return filters.length;
-        })
-        .reduce((a, b) => a + b, 0);
-
-      setMealIn(countDietIn);
-
-      const countDietOut = dataMeals
-        .map(({ data }) => {
-          const filters = data.filter((item) => item.status === false);
-
-          return filters.length;
-        })
-        .reduce((a, b) => a + b, 0);
-
-      setMealOut(countDietOut);
-
-      const currentPercentage =
-        (countDietIn / (countDietIn + countDietOut)) * 100;
-
-      setPercentege(currentPercentage);
-    },
-    [meals]
-  );
-
   const VALUES = {
-    percentage: ((mealIn / (mealIn + mealOut)) * 100).toFixed(2),
     decriptionSummary: "das refeicões dentro da dieta",
     title: "Refeições",
-    mealIn,
-    mealOut,
-    mealsTotal: mealIn + mealOut,
   };
 
   const renderItem = ({ item }: ItemProps) => {
@@ -105,9 +63,7 @@ export function Home() {
   };
 
   const handleNavigateSummary = () => {
-    navigation.navigate("summary", {
-      values: VALUES,
-    });
+    navigation.navigate("summary");
   };
 
   const handleNavigateDetails = (item: ItemListProps) => {
@@ -120,29 +76,18 @@ export function Home() {
     navigation.navigate("new");
   };
 
-  const renderPercentageContainer = useMemo(
-    () => (
-      <Summary onPress={handleNavigateSummary} type={percentage > 50}>
-        <IconNavigate>
-          <Icon type={percentage > 50} />
-        </IconNavigate>
-        <Data>
-          <Percentage>{percentage.toFixed(2)} %</Percentage>
-          <Description>{VALUES.decriptionSummary}</Description>
-        </Data>
-      </Summary>
-    ),
-    [percentage]
-  );
+  const resetData = async () => {
+    await reset();
+    setPercentege(0);
+  };
 
   async function fetchMeals() {
     try {
-      //await reset();
       const meals = await getAllMeals();
-
       setMeals(meals);
 
-      calculate(meals);
+      const data = await calculate();
+      setPercentege(data.percentage);
     } catch (error) {
       console.log("===", error);
     }
@@ -151,9 +96,26 @@ export function Home() {
   // - Carrega as refeicoes a cada vez que tiver foco na tela
   useFocusEffect(
     useCallback(() => {
+      //resetData();
       fetchMeals();
     }, [])
   );
+
+  const renderPercentageContainer = useMemo(
+    () => (
+      <Summary onPress={handleNavigateSummary} type={percentage > 50}>
+        <IconNavigate>
+          <Icon type={percentage > 50} />
+        </IconNavigate>
+        <Data>
+          <Percentage>{percentage} %</Percentage>
+          <Description>{VALUES.decriptionSummary}</Description>
+        </Data>
+      </Summary>
+    ),
+    [percentage]
+  );
+
   return (
     <Container>
       <Head>
